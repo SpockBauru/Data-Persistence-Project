@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainManager : MonoBehaviour
+public class GameLogic : MonoBehaviour
 {
     public Brick BrickPrefab;
     public int LineCount = 6;
@@ -18,7 +18,8 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
+    [SerializeField] private Text TopScore;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -72,5 +73,13 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+
+        if (GameManager.TopScore < m_Points)
+        {
+            GameManager.Instance.SetTopScore(m_Points);
+            GameManager.Instance.SetTopPlayerName(GameManager.PlayerName);
+            GameManager.Instance.SaveData();
+            TopScore.text = "Best Score: " + GameManager.TopPlayerName + " : " + GameManager.TopScore;
+        }
     }
 }
